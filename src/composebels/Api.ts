@@ -21,3 +21,8 @@ const getSearchProducts = async (search: string, page: number) => {
     })
     .catch((err) => console.error(err));
 };
+
+export default ()=>
+{
+    return {getSearchProducts}
+}
