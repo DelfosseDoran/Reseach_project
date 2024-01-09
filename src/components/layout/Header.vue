@@ -1,11 +1,21 @@
 <script lang="ts">
 import { ShoppingCart, UserRound } from 'lucide-vue-next';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
+import { useRouter } from 'vue-router';
 export default defineComponent({
   name: 'Header',
   components: {
     ShoppingCart,
     UserRound,
+  },
+  setup() {
+    const { push, currentRoute } = useRouter()
+    const searchinput =ref<string>('');
+    const search=()=>{
+      //go to search page whit searchinput.value
+      push('/search/'+searchinput.value)
+    }
+    return {searchinput,search};
   },
 });
 </script>
@@ -13,11 +23,16 @@ export default defineComponent({
 <template>
   <main class="bg-white flex justify-between p-2 px-4 shadow-md">
     <h1 class="text-xl font-medium">Webshop</h1>
-    <input
+    <div class="flex gap-4"><input
       type="text"
-      class="border border-gray-300 rounded-md p-1 w-1/3"
+      class="border border-gray-300 rounded-md p-1 "
       placeholder="Search"
+      v-model="searchinput"
     />
+    <button class="bg-lime-200 p-1 px-4 rounded-md" @click="search">
+      search
+    </button>
+  </div>
     <ul class="flex gap-4 items-center">
       <li><router-link class="text-lg" to="/">Home</router-link></li>
       <li>

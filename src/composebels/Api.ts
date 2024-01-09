@@ -1,28 +1,28 @@
-const baseUrl: string = 'https://api.axesso.de/amz/';
-
-const primerykey: string = import.meta.env.Primery;
-
 const getSearchProducts = async (search: string, page: number) => {
-  fetch(
-    baseUrl+`amazon-search-by-keyword-asin?domainCode=com&keyword=${search}&page=${page}&sortBy=relevanceblender`,
-    {
-      method: 'GET',
-      // Request headers
-      headers: {
-        'Cache-Control': 'no-cache',
-        'axesso-api-key': primerykey,
-      },
+  try {
+    const response = await fetch(
+      `http://localhost:3000/api/data?search=${search}&page=${page}`,
+      {
+        method: 'GET',
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
-  )
-    .then((response) => {
-      console.log(response.status);
-      console.log(response.text());
-      return response.json();
-    })
-    .catch((err) => console.error(err));
+
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    // Handle the error or rethrow it as needed
+    throw error;
+  }
 };
 
-export default ()=>
-{
-    return {getSearchProducts}
-}
+export default () => {
+  return {
+    getSearchProducts,
+  };
+};
