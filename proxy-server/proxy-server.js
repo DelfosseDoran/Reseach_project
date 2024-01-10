@@ -15,14 +15,35 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/api/data', async (req, res) => {
+app.get('/api/data/', async (req, res) => {
     try {
+        const searchTerm = req.query.search || 'iphone'; // Default to 'iphone' if search parameter is not provided
+        const page = req.query.page || 1;
         const response = await axios.get('https://api.axesso.de/amz/amazon-search-by-keyword-asin', {
             params: {
                 domainCode: 'com',
-                keyword: 'iphone',
-                page: 1,
+                keyword: searchTerm,
+                page: page,
                 sortBy: 'relevanceblender',
+            },
+            headers: {
+                'Cache-Control': 'no-cache',
+                'axesso-api-key': API_KEY,
+            },
+        });
+        res.json(response.data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.get('/api/data/:asin', async (req, res) => {
+    try {
+        const asin = req.params.asin;
+        const response = await axios.get('https://api.axesso.de/amz/amazon-lookup-product', {
+            params: {
+                url: 'https://www.amazon.com/dp/'+asin,
             },
             headers: {
                 'Cache-Control': 'no-cache',

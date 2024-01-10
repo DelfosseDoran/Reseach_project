@@ -13,7 +13,7 @@ export default defineComponent({
     const searchinput =ref<string>('');
     const search=()=>{
       //go to search page whit searchinput.value
-      push('/search/'+searchinput.value)
+      push('/search/'+searchinput.value+'/1')
     }
     return {searchinput,search};
   },
@@ -21,26 +21,22 @@ export default defineComponent({
 </script>
 
 <template>
-  <main class="bg-white flex justify-between p-2 px-4 shadow-md">
-    <h1 class="text-xl font-medium">Webshop</h1>
+  <header class="bg-white flex justify-between p-2 px-4 shadow-md ">
+    <router-link class="text-xl font-medium" to="/">Webshop</router-link>
     <div class="flex gap-4"><input
       type="text"
       class="border border-gray-300 rounded-md p-1 "
       placeholder="Search"
       v-model="searchinput"
     />
-    <button class="bg-lime-200 p-1 px-4 rounded-md" @click="search">
+    <button class="bg-sky-900 text-gray-100 p-1 px-4 rounded-md" @click="search">
       search
     </button>
   </div>
     <ul class="flex gap-4 items-center">
-      <li><router-link class="text-lg" to="/">Home</router-link></li>
       <li>
-        <router-link to="/22"><ShoppingCart size="18" /></router-link>
-      </li>
-      <li>
-        <router-link to="/22"><UserRound size="18" /></router-link>
+        <router-link to="/"><ShoppingCart size="18" /></router-link>
       </li>
     </ul>
-  </main>
+  </header>
 </template>
