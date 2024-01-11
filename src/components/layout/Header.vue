@@ -35,7 +35,7 @@ export default defineComponent({
   </div>
     <ul class="flex gap-4 items-center">
       <li>
-        <router-link to="/"><ShoppingCart size="18" /></router-link>
+        <router-link to="/cart"><ShoppingCart size="18" /></router-link>
       </li>
     </ul>
   </header>
