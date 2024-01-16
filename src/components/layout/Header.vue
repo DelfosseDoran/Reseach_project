@@ -2,6 +2,7 @@
 import { ShoppingCart, UserRound } from 'lucide-vue-next';
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import data from '../../composebels/data';
 export default defineComponent({
   name: 'Header',
   components: {
@@ -10,7 +11,7 @@ export default defineComponent({
   },
   setup() {
     const { push, currentRoute } = useRouter()
-    const searchinput =ref<string>('');
+    const {searchinput}=data()
     const search=()=>{
       //go to search page whit searchinput.value
       push('/search/'+searchinput.value+'/1')
@@ -35,7 +36,7 @@ export default defineComponent({
   </div>
     <ul class="flex gap-4 items-center">
       <li>
-        <router-link to="/cart"><ShoppingCart size="18" /></router-link>
+        <router-link to="/cart"><ShoppingCart class="h-5" /></router-link>
       </li>
     </ul>
   </header>

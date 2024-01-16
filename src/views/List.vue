@@ -2,31 +2,25 @@
 import get from '@/composebels/Api';
 import { computed, defineComponent, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import data from '../composebels/data'
 export default defineComponent({
   components: {},
   setup() {
+    const { listResult , searchinput} = data();
     const { currentRoute } = useRouter();
     const page = ref(1);
     const product = computed(() => currentRoute.value.params.search);
+    searchinput.value=product.value
     const { getSearchProducts } = get();
-    const data = ref<any>();
-    const result = ref<any>();
     const fetchData = async () => {
-      try {
-        const response = await getSearchProducts(product.value, page.value);
-        data.value = response;
-        result.value = response.searchProductDetails;
-        console.log('API response:', response);
-      } catch (error) {
-        console.error('Error fetching search products:', error);
-      }
+        await getSearchProducts(product.value, page.value);
     };
 
     onMounted(fetchData);
 
     watch(product, fetchData);
 
-    return { data, result };
+    return { listResult };
   },
 });
 </script>
@@ -35,10 +29,11 @@ export default defineComponent({
   <main class="">
       <div
         class="bg-white p-4 m-4 rounded-md shadow-md w-[80vw] mx-auto"
-        v-if="data"
-        v-for="item in result"
-        :key="item.id"
+        v-if="listResult"
+        v-for="(item, index) in listResult"
+        :key="index"
       >
+      <p>{{ index+1 }}</p>
         <h1
           class="font-medium text-xl overflow-hidden text-ellipsis whitespace-nowrap"
         >

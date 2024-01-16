@@ -1,3 +1,6 @@
+import data from './data';
+
+const { listResult, detailResult }= data();
 const getSearchProducts = async (search: string, page: number) => {
   try {
     const response = await fetch(
@@ -12,7 +15,7 @@ const getSearchProducts = async (search: string, page: number) => {
     }
 
     const data = await response.json();
-    return data;
+    listResult.value= data.searchProductDetails;
   } catch (error) {
     console.error('Error fetching data:', error);
     // Handle the error or rethrow it as needed
@@ -34,7 +37,7 @@ const getProducts = async (asin: string) => {
     }
 
     const data = await response.json();
-    return data;
+    detailResult.value= data;
   } catch (error) {
     console.error('Error fetching data:', error);
     // Handle the error or rethrow it as needed

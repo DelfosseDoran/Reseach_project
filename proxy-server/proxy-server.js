@@ -21,7 +21,7 @@ app.get('/api/data/', async (req, res) => {
         const page = req.query.page || 1;
         const response = await axios.get('https://api.axesso.de/amz/amazon-search-by-keyword-asin', {
             params: {
-                domainCode: 'com',
+                domainCode: 'co.uk',
                 keyword: searchTerm,
                 page: page,
                 sortBy: 'relevanceblender',
@@ -43,7 +43,7 @@ app.get('/api/data/:asin', async (req, res) => {
         const asin = req.params.asin;
         const response = await axios.get('https://api.axesso.de/amz/amazon-lookup-product', {
             params: {
-                url: 'https://www.amazon.com/dp/'+asin,
+                url: 'https://www.amazon.co.uk/dp/'+asin,
             },
             headers: {
                 'Cache-Control': 'no-cache',

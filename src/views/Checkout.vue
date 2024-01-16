@@ -1,23 +1,11 @@
 <script lang="ts">
+import data from '@/composebels/data';
 import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 export default defineComponent({
   setup() {
     const paymentMethod = ref<number>(1);
-    const information = ref({
-      name: '',
-      email: '',
-      address: '',
-      city: '',
-      country: '',
-      postalCode: '',
-      paymentMethod: 0,
-      creditCardNumber: '',
-      creditCardExpirationDate: '',
-      creditCardSecurityCode: '',
-      paypalEmail: '',
-      paypalPassword: '',
-    });
+    const {information} = data();
     const { push } = useRouter();
     const changePaymentMethod = (method: number) => {
       paymentMethod.value = method;
