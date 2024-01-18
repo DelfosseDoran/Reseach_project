@@ -4,74 +4,18 @@ import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 export default defineComponent({
   setup() {
-    const paymentMethod = ref<number>(1);
-    const {information} = data();
     const { push } = useRouter();
+    const {information,paymentMethod ,pay} = data();
     const changePaymentMethod = (method: number) => {
       paymentMethod.value = method;
       console.log(paymentMethod.value);
     };
-    const validateEmail = (email: string): boolean => {
-      // Basic email validation
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return emailRegex.test(email);
-    };
-
-    const validateCreditCard = (creditCardNumber: string): boolean => {
-      // Basic credit card number validation (you may want to use a library for a more thorough check)
-      return /^\d{16}$/.test(creditCardNumber);
-    };
-
-    const validateExpirationDate = (expirationDate: string): boolean => {
-      // Basic expiration date validation (you may want to use a library for a more thorough check)
-      return /^\d{2}\/\d{2}$/.test(expirationDate);
-    };
-
-    const validateForm = (): boolean => {
-      // Check if all required fields are filled in
-      const requiredFields = [
-        'name',
-        'email',
-        'address',
-        'city',
-        'country',
-        'postalCode',
-      ];
-
-      if (requiredFields.some((field) => !information.value[field])) {
-        console.error('Please fill in all required fields');
-        return false;
-      }
-
-      // Additional validation based on payment method
-      if (paymentMethod.value === 1) {
-        // Credit card validation
-        if (!validateCreditCard(information.value.creditCardNumber)) {
-          console.error('Invalid credit card number');
-          return false;
-        }
-
-        if (
-          !validateExpirationDate(information.value.creditCardExpirationDate)
-        ) {
-          console.error('Invalid credit card expiration date');
-          return false;
-        }
-      } else if (paymentMethod.value === 2) {
-        // PayPal validation (you can add validation logic for PayPal fields if needed)
-      }
-
-      return true;
-    };
-    const pay = () => {
-      if (!validateForm()) {
-        console.log('Validation failed, do not proceed with payment')
-        return;
-      }
-      localStorage.removeItem('productList');
+    const payment=()=>{
+    if(pay())
       push('/');
-    };
-    return { paymentMethod, changePaymentMethod, information, pay };
+    }
+    
+    return { paymentMethod, changePaymentMethod, information, payment };
   },
 });
 </script>
@@ -111,6 +55,13 @@ export default defineComponent({
         id="city"
       />
 
+      <label for="postalCode">postalCode</label>
+      <input
+        class="rounded-md p-1 mb-2"
+        type="text"
+        v-model="information.postalCode"
+        id="postalCode"
+      />
       <label for="country">country</label>
       <input
         class="rounded-md p-1 mb-2"
@@ -119,25 +70,19 @@ export default defineComponent({
         id="country"
       />
 
-      <label for="postalCode">postalCode</label>
-      <input
-        class="rounded-md p-1 mb-2"
-        type="text"
-        v-model="information.postalCode"
-        id="postalCode"
-      />
-      <label for="paymentMethod">paymentMethod</label>
+      <label for="paymentMethod">payment methods</label>
       <select
         class="rounded-md p-1 mb-2"
-        @change="(e) => changePaymentMethod(Number(e.target.value))"
+        v-model="paymentMethod"
+        
         id="paymentMethod"
       >
-        <option value="0" disabled>select payment method</option>
-        <option value="1">credit</option>
-        <option value="2">paypal</option>
+        <option :value="0" disabled>select payment method</option>
+        <option :value="1">credit card</option>
+        <option :value="2">paypal</option>
       </select>
       <div class="grid" v-if="paymentMethod === 1">
-        <label for="creditCardNumber">creditCardNumber</label>
+        <label for="creditCardNumber">credit card number</label>
         <input
           class="rounded-md p-1 mb-2"
           type="text"
@@ -145,7 +90,7 @@ export default defineComponent({
           id="creditCardNumber"
         />
 
-        <label for="creditCardExpirationDate">creditCardExpirationDate</label>
+        <label for="creditCardExpirationDate">credit card expiration date</label>
         <input
           class="rounded-md p-1 mb-2"
           type="text"
@@ -153,7 +98,7 @@ export default defineComponent({
           id="creditCardExpirationDate"
         />
 
-        <label for="creditCardSecurityCode">creditCardSecurityCode</label>
+        <label for="creditCardSecurityCode">credit card security code</label>
         <input
           class="rounded-md p-1 mb-2"
           type="text"
@@ -162,7 +107,7 @@ export default defineComponent({
         />
       </div>
       <div class="grid" v-if="paymentMethod === 2">
-        <label for="paypalEmail">paypalEmail</label>
+        <label for="paypalEmail">paypal email</label>
         <input
           class="rounded-md p-1 mb-2"
           type="text"
@@ -170,7 +115,7 @@ export default defineComponent({
           id="paypalEmail"
         />
 
-        <label for="paypalPassword">paypalPassword</label>
+        <label for="paypalPassword">paypal password</label>
         <input
           class="rounded-md p-1 mb-2"
           type="text"
@@ -179,7 +124,7 @@ export default defineComponent({
         />
       </div>
       <div class="flex justify-center">
-        <button class="bg-sky-900 text-white p-2 px-4 w-fit rounded-md" @click="pay">
+        <button class="bg-sky-900 text-white p-2 px-4 w-fit rounded-md" @click="payment">
           pay
         </button>
       </div>
