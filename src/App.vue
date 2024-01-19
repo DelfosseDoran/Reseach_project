@@ -12,7 +12,7 @@ export default defineComponent({
     const voice = ref<SpeechSynthesisVoice>(
       undefined as unknown as SpeechSynthesisVoice
     );
-    const text = ref('Hello, everyone! Good morning!');
+    const text = ref('');
     const pitch = ref(1);
     const rate = ref(1);
 
@@ -172,7 +172,7 @@ export default defineComponent({
             .replace('paypal password ', '')
             .trim();
         } else if (
-          result.includes('pay') &&
+          result.includes('place order') &&
           window.location.href.includes('checkout')
         ) {
           if (pay()) push('/');
@@ -219,7 +219,7 @@ export default defineComponent({
         ) {
           information.value.name = result.replace('name ', '').trim();
         } else if (
-          result.includes('details and pay') &&
+          result.includes('check out') &&
           window.location.href.includes('cart')
         ) {
           text.value = 'give your details and pay';
@@ -235,9 +235,9 @@ export default defineComponent({
             text.value =
               'deleted ' +
               cart[numberResult - 1].productTitle +
-              ' from your basket. Now you have ' +
+              ' from your shopping cart. Now you have ' +
               (cart.length - 1) +
-              ' items in your basket';
+              ' items in your shopping cart';
             cart.splice(numberResult - 1, 1);
             localStorage.setItem('productList', JSON.stringify(cart));
             updateCart.value = true;
@@ -313,10 +313,11 @@ export default defineComponent({
           const numberResult = parseWordOrNumber(numberPart);
 
           if (!isNaN(numberResult)) {
+            console.log(listResult.value[numberResult - 1]);
             text.value =
               'show product ' +
               numberResult +
-              listResult.value[numberResult - 1].productTitle;
+              listResult.value[numberResult - 1].productDescription;
             push('/product/' + listResult.value[numberResult - 1].asin);
           } else {
             text.value = "didn't understand the number";
@@ -331,9 +332,9 @@ export default defineComponent({
         //navigation
         else if (result.includes('go back')) {
           back();
-        } else if (result.includes('navigate to basket')) {
+        } else if (result.includes('navigate to shopping cart')) {
           text.value =
-            'navigate to basket. There are ' +
+            'navigate to shopping cart. There are ' +
             JSON.parse(localStorage.getItem('productList') || '[]').length +
             ' items in your basket';
           push('/cart');

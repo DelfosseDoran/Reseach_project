@@ -5,16 +5,15 @@ import { useRouter } from 'vue-router';
 export default defineComponent({
   setup() {
     const { push } = useRouter();
-    const {information,paymentMethod ,pay} = data();
+    const { information, paymentMethod, pay } = data();
     const changePaymentMethod = (method: number) => {
       paymentMethod.value = method;
       console.log(paymentMethod.value);
     };
-    const payment=()=>{
-    if(pay())
-      push('/');
-    }
-    
+    const payment = () => {
+      if (pay()) push('/');
+    };
+
     return { paymentMethod, changePaymentMethod, information, payment };
   },
 });
@@ -71,16 +70,11 @@ export default defineComponent({
       />
 
       <label for="paymentMethod">payment methods</label>
-      <select
-        class="rounded-md p-1 mb-2"
-        v-model="paymentMethod"
-        
-        id="paymentMethod"
-      >
-        <option :value="0" disabled>select payment method</option>
-        <option :value="1">credit card</option>
-        <option :value="2">paypal</option>
-      </select>
+      <div class="flex gap-2">
+        <button class="rounded-md p-1 mb-2 bg-white w-full" @click="() => (paymentMethod = 1)">credit card</button>
+        <button class="rounded-md p-1 mb-2 bg-white w-full" @click="() => (paymentMethod = 2)">paypal</button>
+      </div>
+
       <div class="grid" v-if="paymentMethod === 1">
         <label for="creditCardNumber">credit card number</label>
         <input
@@ -90,7 +84,9 @@ export default defineComponent({
           id="creditCardNumber"
         />
 
-        <label for="creditCardExpirationDate">credit card expiration date</label>
+        <label for="creditCardExpirationDate"
+          >credit card expiration date</label
+        >
         <input
           class="rounded-md p-1 mb-2"
           type="text"
@@ -124,8 +120,11 @@ export default defineComponent({
         />
       </div>
       <div class="flex justify-center">
-        <button class="bg-sky-900 text-white p-2 px-4 w-fit rounded-md" @click="payment">
-          pay
+        <button
+          class="bg-sky-900 text-white p-2 px-4 w-fit rounded-md"
+          @click="payment"
+        >
+          order
         </button>
       </div>
     </div>

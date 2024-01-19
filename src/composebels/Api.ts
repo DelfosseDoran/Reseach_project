@@ -37,7 +37,7 @@ const getProducts = async (asin: string) => {
     }
 
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     detailResult.value= data;
   } catch (error) {
     console.error('Error fetching data:', error);

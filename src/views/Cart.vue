@@ -50,7 +50,7 @@ export default defineComponent({
       <RouterLink
         class="bg-sky-900 text-white p-4 py-2 rounded-md"
         to="/checkout"
-        >details and pay</RouterLink
+        >checkout</RouterLink
       >
     </div>
     <ul>
