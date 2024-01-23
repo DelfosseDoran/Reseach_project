@@ -1,6 +1,8 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
+const voiceUIActive = ref<boolean>(true);
+
 const listResult = ref<ProductData[]>([]);
 const detailResult = ref<any>(0);
 const searchinput = ref<string>('');
@@ -89,5 +91,6 @@ export default () => {
     updateCart,
     information,
     paymentMethod,
+    voiceUIActive,
   };
 };

@@ -4,62 +4,21 @@ import { defineComponent, watch, ref, onMounted } from 'vue';
 import { useSpeechRecognition, useSpeechSynthesis } from '@vueuse/core';
 import { useRouter, RouterView } from 'vue-router';
 import data from './composebels/data';
-import { ProductData } from '@interface/productInterface';
+import gpt from './composebels/Gpt';
+import textToSpeech from './composebels/TextToSpeech';
+import VoiceUi from './composebels/VoiceUI';
+import { ProductData } from './interface/productInterface';
 
 export default defineComponent({
   components: { Header },
   setup() {
-    const voice = ref<SpeechSynthesisVoice>(
-      undefined as unknown as SpeechSynthesisVoice
-    );
-    const text = ref('');
-    const pitch = ref(1);
-    const rate = ref(1);
+    const { main, advice, diverece } = gpt();
+    // advice('what is the best laptop for a gamer');
+    // main();
+    const { play, text } = textToSpeech();
 
-    const speker = useSpeechSynthesis(text, {
-      voice,
-      pitch,
-      rate,
-    });
-    let synth: SpeechSynthesis;
-
-    const voices = ref<SpeechSynthesisVoice[]>([]);
-
-    onMounted(() => {
-      if (speker.isSupported.value) {
-        // load at last
-        setTimeout(() => {
-          synth = window.speechSynthesis;
-          voices.value = synth.getVoices();
-          voice.value = voices.value[110];
-        });
-      }
-    });
+    const { speech } = VoiceUi();
     const { push, back } = useRouter();
-    const lang = ref('en-US');
-    const play = () => {
-      if (speker.status.value === 'pause') {
-        window.speechSynthesis.resume();
-      } else {
-        speech.stop();
-        speker.speak();
-      }
-    };
-    watch(speker.status, (status) => {
-      console.log(status);
-      if (status === 'end') {
-        text.value = '';
-        speech.start();
-      }
-    });
-
-    const pause = () => {
-      window.speechSynthesis.pause();
-    };
-
-    const stop = () => {
-      speker.stop();
-    };
 
     const {
       detailResult,
@@ -71,50 +30,8 @@ export default defineComponent({
       pay,
     } = data();
 
-    const speech = useSpeechRecognition({
-      lang: 'en-US',
-      continuous: true,
-      interimResults: false,
-    });
-
-    const listGramer: String[] = [
-      'go back',
-      'navigate to basket',
-      'navigate to home',
-      'search',
-      'show product',
-      'add product',
-      'delete',
-      'variant',
-      'scroll up',
-      'scroll down',
-      'scroll to top',
-      'scroll to bottom',
-      'pay',
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      '10',
-    ];
-
-    const grammar = `#JSGF V1.0;grammar colors;public <color> = ${listGramer.join(
-      ' | '
-    )} ;`;
-
     if (speech.isSupported.value) {
-      // @ts-expect-error missing types
-      const SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
-      const speechRecognitionList = new SpeechGrammarList();
-      speechRecognitionList.addFromString(grammar, 1);
-      speech.recognition!.grammars = speechRecognitionList;
-
-      watch(speech.result, () => {
+      watch(speech.result, async () => {
         if (!speech.isFinal.value) {
           return;
         }
@@ -123,7 +40,38 @@ export default defineComponent({
           .toLocaleLowerCase()
           .replace(/[^a-zA-Z0-9 ]/g, '');
         console.log(result);
-        if (
+        if (result.includes('show the difference between product ')) {
+          const listNumber: string[] = result
+            .replace('show the difference between product ', '')
+            .replace(' and', '')
+            .split(' ');
+          const number = parseWordOrNumber(listNumber[0]);
+          const number2 = parseWordOrNumber(listNumber[1]);
+          console.log(number);
+          console.log(number2);
+          if (!isNaN(number) && !isNaN(number2)) {
+            const divereceText = await diverece(
+              listResult.value[number - 1],
+              listResult.value[number2 - 1]
+            );
+            if (divereceText) {
+              text.value = divereceText;
+            } else {
+              text.value = 'sorry i dont know the answer to that question';
+            }
+          } else {
+            text.value = "didn't understand the number";
+          }
+        } else if (result.includes('hey shop')) {
+          console.log('hey shopbot');
+          const adviceresponce = await advice(result.replace('hey shop ', ''));
+          console.log(adviceresponce);
+          if (adviceresponce) {
+            text.value = adviceresponce;
+          } else {
+            text.value = 'sorry i dont know the answer to that question';
+          }
+        } else if (
           result.includes('credit card number') &&
           window.location.href.includes('checkout') &&
           paymentMethod.value == 1
@@ -241,8 +189,7 @@ export default defineComponent({
             cart.splice(numberResult - 1, 1);
             localStorage.setItem('productList', JSON.stringify(cart));
             updateCart.value = true;
-          }
-          else {
+          } else {
             text.value = "didn't understand the number";
           }
         } else if (
@@ -264,7 +211,7 @@ export default defineComponent({
             text.value = "didn't understand the number";
           }
         } else if (
-          result.includes('add product') &&
+          result.includes('Add to List') &&
           window.location.href.includes('product')
         ) {
           const existingProducts = JSON.parse(
@@ -293,10 +240,10 @@ export default defineComponent({
           window.location.href.includes('product')
         ) {
           const list: String[] = result.replace('variant ', '').split(' ');
-          detailResult.value.variations.find((variant) => {
+          detailResult.value.variations.find((variant: any) => {
             list.map((word) => {
               if (variant.variationName.includes(word)) {
-                variant.values.map((value) => {
+                variant.values.map((value: any) => {
                   if (value.value.toLowerCase().includes(list[1])) {
                     text.value = word + value.value;
                     push('/product/' + value.asin);
@@ -387,31 +334,6 @@ export default defineComponent({
 
       return wordNumberMap[input.toLowerCase()] || NaN;
     };
-
-    watch(speech.isSupported, (isSupported) => {
-      if (!isSupported) {
-        console.log('SpeechRecognition is not supported in your browser.');
-      }
-    });
-    watch(speech.isListening, async (isListening) => {
-      if (isListening) {
-        console.log('Listening...');
-      } else {
-        console.log('Stopped listening.');
-        if (speker.status.value == 'end') {
-          await new Promise((r) => setTimeout(r, 1000));
-          speech.start();
-        }
-      }
-    });
-
-    const selectedLanguage = ref(lang.value);
-    watch(lang, (lang) =>
-      speech.isListening.value ? null : (selectedLanguage.value = lang)
-    );
-    watch(speech.isListening, (isListening) =>
-      isListening ? null : (selectedLanguage.value = lang.value)
-    );
     speech.start();
     return {};
   },
