@@ -3,51 +3,57 @@
 <template>
   <main class="p-2 px-4">
     <div class="bg-white p-4 rounded-md shadow-md">
-      <h1 class="text-xl font-medium">commands</h1>
+      <h1 class="text-xl font-medium">Commands</h1>
       <div class="bg-black">
         <div class="grid grid-cols-2 gap-px p-px">
-          <p class="text-lg p-1 bg-white">Scroll commands</p>
+          <p class="text-lg p-1 bg-white font-medium">AI Commands</p>
           <div class="bg-white p-1"></div>
-          <p class="bg-white p-1">scroll down</p>
-          <p class="bg-white p-1">scroll down</p>
-          <p class="bg-white p-1">scroll up</p>
-          <p class="bg-white p-1">scroll up</p>
-          <p class="bg-white p-1">scroll all the way to the top</p>
-          <p class="bg-white p-1">scroll to top</p>
-          <p class="bg-white p-1">scroll down all the way</p>
-          <p class="bg-white p-1">scroll to bottom</p>
-          <p class="text-lg bg-white p-1">navigate commands</p>
+          <p class="bg-white p-1">Ask a question to the AI</p>
+          <p class="bg-white p-1">Hey shop [question]</p>
+          <p class="bg-white p-1 grid grid-cols-2">Get the difference between products <span class="font-medium">[only on the products page]</span></p>
+          <p class="bg-white p-1">Show the difference between product number [product index] and number [product index]</p>
+          <p class="text-lg p-1 bg-white font-medium">Scroll Commands</p>
+          <div class="bg-white p-1"></div>
+          <p class="bg-white p-1">Scroll down</p>
+          <p class="bg-white p-1">Scroll down</p>
+          <p class="bg-white p-1">Scroll up</p>
+          <p class="bg-white p-1">Scroll up</p>
+          <p class="bg-white p-1">Scroll all the way to the top</p>
+          <p class="bg-white p-1">Scroll to top</p>
+          <p class="bg-white p-1">Scroll down all the way</p>
+          <p class="bg-white p-1">Scroll to bottom</p>
+          <p class="text-lg bg-white p-1 font-medium">Navigate Commands</p>
           <div class="bg-white"></div>
-          <p class="bg-white p-1">navigate a page back</p>
-          <p class="bg-white p-1">go back</p>
-          <p class="bg-white p-1">go to the basket page</p>
-          <p class="bg-white p-1">navigate to shopping cart</p>
-          <p class="bg-white p-1">go to the home page</p>
-          <p class="bg-white p-1">navigate to home</p>
-          <p class="text-lg bg-white p-1">product commands</p>
+          <p class="bg-white p-1">Navigate a page back</p>
+          <p class="bg-white p-1">Go back</p>
+          <p class="bg-white p-1">Go to the basket page</p>
+          <p class="bg-white p-1">Navigate to shopping cart</p>
+          <p class="bg-white p-1">Go to the home page</p>
+          <p class="bg-white p-1">Navigate to home</p>
+          <p class="text-lg bg-white p-1 font-medium">Product Commands</p>
           <div class="bg-white"></div>
-          <p class="bg-white p-1">search a product</p>
-          <p class="bg-white p-1">search [product name]</p>
-          <p class="bg-white p-1 grid grid-cols-2">show a product <span class="font-medium">[only on the products and cart page]</span></p>
-          <p class="bg-white p-1">show product [product index]</p>
-          <p class="bg-white p-1 grid grid-cols-2">add a product to the cart <span class="font-medium">[only on the products page]</span></p>
-          <p class="bg-white p-1">add product</p>
-          <p class="bg-white p-1 grid grid-cols-2">get variants <span class="font-medium">[only on product page]</span></p>
-          <p class="bg-white p-1">variant [variant lable] [variant value]</p>
-          <p class="text-lg bg-white p-1">shopping cart commands</p>
+          <p class="bg-white p-1">Search a product</p>
+          <p class="bg-white p-1">Search [product name]</p>
+          <p class="bg-white p-1 grid grid-cols-2">Show a product <span class="font-medium">[only on the products and cart page]</span></p>
+          <p class="bg-white p-1">Show product [product index]</p>
+          <p class="bg-white p-1 grid grid-cols-2">Add a product to the cart <span class="font-medium">[only on the product detail page]</span></p>
+          <p class="bg-white p-1">Add product</p>
+          <p class="bg-white p-1 grid grid-cols-2">Get variants <span class="font-medium">[only on the product detail page]</span></p>
+          <p class="bg-white p-1">Variant [variant label] [variant value]</p>
+          <p class="text-lg bg-white p-1 font-medium">Shopping Cart Commands</p>
           <div class="bg-white"></div>
-          <p class="bg-white p-1 grid grid-cols-2">delete a product <span class="font-medium">[only on checkout page]</span></p>
-          <p class="bg-white p-1">delete [product index]</p>
-          <p class="bg-white p-1 grid grid-cols-2">go to checkout <span class="font-medium">[only on checkout page]</span></p>
-          <p class="bg-white p-1">checkout</p>
-          <p class="text-lg bg-white p-1">checkout commands</p>
+          <p class="bg-white p-1 grid grid-cols-2">Delete a product <span class="font-medium">[only on checkout page]</span></p>
+          <p class="bg-white p-1">Delete [product index]</p>
+          <p class="bg-white p-1 grid grid-cols-2">Go to checkout <span class="font-medium">[only on checkout page]</span></p>
+          <p class="bg-white p-1">Checkout</p>
+          <p class="text-lg bg-white p-1 font-medium">Checkout Commands</p>
           <div class="bg-white"></div>
-          <p class="bg-white p-1 grid grid-cols-2">fill input box <span class="font-medium">[only on checkout page]</span></p>
+          <p class="bg-white p-1 grid grid-cols-2">Fill input box <span class="font-medium">[only on checkout page]</span></p>
           <p class="bg-white p-1">[input box name] [value]</p>
-          <p class="bg-white p-1 grid grid-cols-2">select a payment method <span class="font-medium">[only on checkout page]</span></p>
-          <p class="bg-white p-1">payment methods [payment method]</p>
-          <p class="bg-white p-1 grid grid-cols-2">place an order <span class="font-medium">[only on checkout page]</span></p>
-          <p class="bg-white p-1">place order</p>
+          <p class="bg-white p-1 grid grid-cols-2">Select a payment method <span class="font-medium">[only on checkout page]</span></p>
+          <p class="bg-white p-1">Payment methods [payment method]</p>
+          <p class="bg-white p-1 grid grid-cols-2">Place an order <span class="font-medium">[only on checkout page]</span></p>
+          <p class="bg-white p-1">Place order</p>
         </div>
       </div>
     </div>

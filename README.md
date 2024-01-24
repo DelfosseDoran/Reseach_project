@@ -1,40 +1,90 @@
-# Reseach_project
+# User Guide - Installation Guide
+Research Project
 
-This template should help get you started developing with Vue 3 in Vite.
+## Setting Up .env Files
 
-## Recommended IDE Setup
+### If there are no .env files in the project, follow these steps to create the .env files with the correct variables.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+1. Create a file in the project's proxy server directory named `.env`.
 
-## Type Support for `.vue` Imports in TS
+2. Go to [axesso.developer.azure-api.net](https://axesso.developer.azure-api.net/) and create an account.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+3. Next, visit the [Products page](https://axesso.developer.azure-api.net/products) and select one of the following.
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+4. Then, go to [Profile](https://axesso.developer.azure-api.net/profile) and click on 'Show' next to the Primary key. Copy this key and paste it into your `.env` file.
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+```dotenv
+VITE_API_KEY='Your-key'
+```
+5. Go to the root of the project and also create a file named .env there.
 
-## Customize configuration
+6. Go to OpenAI Platform and log in or create an account.
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+7. Then, navigate to Billing Overview and create a plan.
 
-## Project Setup
+8. Next, go to API Keys and create an API key. Copy this key and paste it into the .env file.
 
-```sh
-npm install
+```dotenv
+VITE_OPENAI_API_KEY='Your-key'
+```
+## Project Startup
+### Follow these steps to start the project.
+
+1. Open a terminal.
+
+2. Navigate to the directory where the project is located on your computer.
+
+3. Run this command to install all the required node_modules.
+
+```cmd
+npm i 
 ```
 
-### Compile and Hot-Reload for Development
+4. Run this command to start the project.
 
-```sh
-npm run dev
+```cmd
+npm run dev 
 ```
 
-### Type-Check, Compile and Minify for Production
+5. Open a second terminal.
 
-```sh
-npm run build
+6. Navigate to the directory where the project is located on your computer.
+
+7. Navigate to the proxy server directory.
+
+8. Run this command to install the required node_modules.
+
+```cmd
+npm i 
 ```
+
+9. Run the command node proxy-server.js to establish communication between the project and the API.
+
+## User Guide
+Visit [local website](http://localhost:5173/) using Microsoft Edge.
+
+Allow microphone access.
+
+Ensure your audio is on and then use one of the following commands to interact with the webshop. The webshop can also be used like a regular online store.
+
+### Various Commands
+| Category              | Command Description                                               | Command Syntax                                       |
+|-----------------------|------------------------------------------------------------------|------------------------------------------------------|
+| **AI Commands**       | Ask a question to the AI                                           | `"Hey shop [question]"`                               |
+|                       | Retrieve the difference between products (only on the products page) | `"Show the difference between product number [product index] and number [product index]"` |
+| **Scroll Commands**   | Scroll down                                                       | `"Scroll down"`                                       |
+|                       | Scroll up                                                         | `"Scroll up"`                                         |
+|                       | Scroll to the top                                                 | `"Scroll to top"`                                     |
+|                       | Scroll to the bottom                                              | `"Scroll to bottom"`                                  |
+| **Navigation Commands**| Navigate back a page                                              | `"Go back"`                                           |
+|                       | Go to the shopping cart page                                      | `"Navigate to shopping cart"`                         |
+|                       | Go to the home page                                               | `"Navigate to home"`                                  |
+| **Product Commands**  | Search for a product                                              | `"Search [product name]"`                             |
+|                       | Display a product (only on the products and cart pages)         | `"Show product [product index]"`                      |
+|                       | Add a product to the shopping cart (only on the product detail page) | `"Add product"`                                    |
+|                       | Retrieve product variants (only on the product detail page)     | `"Variant [variant label] [variant value]"`          |
+| **Shopping Cart Commands** | Remove a product (only on the checkout page)                 | `"Delete [product index]"`                            |
+|                       | Go to the checkout page                                           | `"Checkout"`                                          |
+| **Checkout Commands** | Fill in an input field (only on the checkout page)              | `"[input box name] [value]"`                          |
+|                       | Select a payment method (only on the checkout page)            | `"Payment methods [payment method]"`                  |
+|                       | Place an order (only on the checkout page)                      | `"Place order"`                                       |

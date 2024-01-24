@@ -40,7 +40,7 @@ export default defineComponent({
           .toLocaleLowerCase()
           .replace(/[^a-zA-Z0-9 ]/g, '');
         console.log(result);
-        if (result.includes('show the difference between product ')) {
+        if (result.includes('show the difference between product ')&& window.location.href.includes('products')) {
           const listNumber: string[] = result
             .replace('show the difference between product ', '')
             .replace(' and', '')
