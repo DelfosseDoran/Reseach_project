@@ -47,14 +47,6 @@ watch(speker.status, (status) => {
   }
 });
 
-const pause = () => {
-  window.speechSynthesis.pause();
-};
-
-const stop = () => {
-  speker.stop();
-};
-
 export default () => {
   return {
     play,

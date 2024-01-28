@@ -5,17 +5,6 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 });
 
-const main = async () => {
-  const completion = await openai.chat.completions.create({
-    messages: [
-      { role: 'system', content: 'what is the best phone for 500 euro' },
-    ],
-    model: 'gpt-3.5-turbo',
-  });
-
-  console.log(completion.choices[0]);
-};
-
 const advice = async (question: string) => {
   const completion = await openai.chat.completions.create({
     messages: [{ role: 'system', content: question + ' short anser please' }],
@@ -40,7 +29,7 @@ const diverece = async (product1: any, product2: any) => {
     model: 'gpt-3.5-turbo',
   });
   console.log(
-    'give the diverce between these products' +
+    'give the main diverce between these products' +
       JSON.stringify(product1) +
       ' and ' +
       JSON.stringify(product2) +
@@ -50,10 +39,31 @@ const diverece = async (product1: any, product2: any) => {
   return completion.choices[0].message.content;
 };
 
+const productname = async (product: any) => {
+  const completion = await openai.chat.completions.create({
+    messages: [
+      {
+        role: 'system',
+        content: 
+          'give the name of this product ' +
+          JSON.stringify(product) +
+          ' short anser please',
+      },
+    ],
+    model: 'gpt-3.5-turbo',
+  });
+  console.log(completion.choices[0].message.content);
+
+  return completion.choices[0].message.content?.replace(
+    'The name of the product is',
+    ''
+  );
+};
+
 export default () => {
   return {
-    main,
     advice,
     diverece,
+    productname,
   };
 };

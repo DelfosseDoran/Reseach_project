@@ -1,7 +1,6 @@
 <script lang="ts">
 import Header from './components/layout/Header.vue';
 import { defineComponent, watch, ref, onMounted } from 'vue';
-import { useSpeechRecognition, useSpeechSynthesis } from '@vueuse/core';
 import { useRouter, RouterView } from 'vue-router';
 import data from './composebels/data';
 import gpt from './composebels/Gpt';
@@ -12,7 +11,7 @@ import { ProductData } from './interface/productInterface';
 export default defineComponent({
   components: { Header },
   setup() {
-    const { main, advice, diverece } = gpt();
+    const { advice, diverece, productname } = gpt();
     // advice('what is the best laptop for a gamer');
     // main();
     const { play, text } = textToSpeech();
@@ -35,18 +34,27 @@ export default defineComponent({
         if (!speech.isFinal.value) {
           return;
         }
+        // console.log(paymentMethod.value);
         let result: string = speech.result.value
           .trim()
           .toLocaleLowerCase()
-          .replace(/[^a-zA-Z0-9 ]/g, '');
+          .replace(/.$/, '');
         console.log(result);
-        if (result.includes('show the difference between product ')&& window.location.href.includes('products')) {
+        if (
+          result.includes('show the difference between product') &&
+          window.location.href.includes('search')
+        ) {
           const listNumber: string[] = result
             .replace('show the difference between product ', '')
             .replace(' and', '')
             .split(' ');
-          const number = parseWordOrNumber(listNumber[0]);
-          const number2 = parseWordOrNumber(listNumber[1]);
+          //remove all non numbers
+          const number = parseWordOrNumber(
+            listNumber[0].replace(/[^0-9]/g, '')
+          );
+          const number2 = parseWordOrNumber(
+            listNumber[1].replace(/[^0-9]/g, '')
+          );
           console.log(number);
           console.log(number2);
           if (!isNaN(number) && !isNaN(number2)) {
@@ -104,18 +112,24 @@ export default defineComponent({
             .replace(/[^0-9]/g, '')
             .trim();
         } else if (
-          result.includes('paypal email') &&
-          window.location.href.includes('checkout') &&
-          paymentMethod.value == 1
+          result.includes('paypal email') ||
+          (result.includes('paypal e-mail ') &&
+            window.location.href.includes('checkout') &&
+            paymentMethod.value == 2)
         ) {
+          // console.log('🌈🌈🌈🌈')
+          if (result.includes('e-mail')) {
+            result = result.replace('paypal e-mail ', '').trim();
+          }
           information.value.paypalEmail = result
             .replace('paypal email ', '')
             .trim();
         } else if (
           result.includes('paypal password') &&
           window.location.href.includes('checkout') &&
-          paymentMethod.value == 1
+          paymentMethod.value == 2
         ) {
+          console.log(result.replace('paypal password ', '').trim());
           information.value.paypalPassword = result
             .replace('paypal password ', '')
             .trim();
@@ -150,16 +164,20 @@ export default defineComponent({
           result.includes('city') &&
           window.location.href.includes('checkout')
         ) {
-          information.value.city = result.replace('city ', '').trim();
+          information.value.city = result.replace('city, ', '').trim();
         } else if (
           result.includes('address') &&
           window.location.href.includes('checkout')
         ) {
-          information.value.address = result.replace('address ', '').trim();
+          information.value.address = result.replace('address, ', '').trim();
         } else if (
-          result.includes('email') &&
-          window.location.href.includes('checkout')
+          result.includes('email') ||
+          (result.includes('e-mail') &&
+            window.location.href.includes('checkout'))
         ) {
+          if (result.includes('e-mail')) {
+            result = result.replace('e-mail ', '').trim();
+          }
           information.value.email = result.replace('email ', '').trim();
         } else if (
           result.includes('name') &&
@@ -211,7 +229,7 @@ export default defineComponent({
             text.value = "didn't understand the number";
           }
         } else if (
-          result.includes('Add to List') &&
+          result.includes('add to list') &&
           window.location.href.includes('product')
         ) {
           const existingProducts = JSON.parse(
@@ -261,10 +279,10 @@ export default defineComponent({
 
           if (!isNaN(numberResult)) {
             console.log(listResult.value[numberResult - 1]);
-            text.value =
-              'show product ' +
-              numberResult +
-              listResult.value[numberResult - 1].productDescription;
+            const disc = await productname(
+              listResult.value[numberResult - 1].productDescription
+            );
+            text.value = 'show product ' + numberResult + disc;
             push('/product/' + listResult.value[numberResult - 1].asin);
           } else {
             text.value = "didn't understand the number";
